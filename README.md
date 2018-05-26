@@ -4,6 +4,8 @@
 
 Moccasin is a peer-to-peer chat client that connects to other Moccasin instances within the same local network. To establish connections multicast DNS is used which means no central server instance is needed. The application is build using webtechnologies like electron, react and typescript.
 
+![Screenshot](src/resources/Screenshot.png)
+
 ## Table of Contents
 
 - [Updating to New Releases](#updating-to-new-releases)

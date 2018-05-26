@@ -65,7 +65,7 @@ export class App extends React.Component<AppProps, AppState> {
               + " Meine Mutter hat manch gülden Gewand.\"",
             time: 1527399338,
           },
-          name: "Denis-Michael Lux",
+          name: "Gotthold E. Lessing",
           port: 3000,
         },
         {
@@ -88,7 +88,7 @@ export class App extends React.Component<AppProps, AppState> {
               + " Es scheinen die alten Weiden so grau. -",
             time: 1527399338,
           },
-          name: "Malte Schmitz",
+          name: "Johann W. von Goethe",
           port: 3001,
         },
         {
@@ -107,7 +107,7 @@ export class App extends React.Component<AppProps, AppState> {
               + " In seinen Armen das Kind war tot.",
             time: 1527399338,
           },
-          name: "Torben Scheffel",
+          name: "Friedrich Schiller",
           port: 3002,
         },
       ],
