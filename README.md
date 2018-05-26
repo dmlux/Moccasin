@@ -1,7 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+![Moccasin Logo](src/resources/icons/256x256.png)
 
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+# Moccasin
+
+Moccasin is a peer-to-peer chat client that connects to other Moccasin instances within the same local network. To establish connections multicast DNS is used which means no central server instance is needed. The application is build using webtechnologies like electron, react and typescript.
 
 ## Table of Contents
 
