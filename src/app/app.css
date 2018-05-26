@@ -1,0 +1,33 @@
+.moccasin-app {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  font-weight: 400;
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: 1.1em;
+  z-index: 10;
+}
+
+.moccasin-content {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-direction: column;
+}
+
+.moccasin-content > .moccasin-chat-partner-name {
+  font-size: 18px;
+  font-weight: 100;
+  position: absolute;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .9);
+  padding: 15px 0px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  user-select: none;
+}

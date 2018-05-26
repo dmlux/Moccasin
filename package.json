@@ -1,0 +1,30 @@
+{
+  "name": "Moccasin",
+  "author": "Denis-Michael Lux <denis.lux@icloud.com>",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "start": "react-scripts-ts-electron start",
+    "build": "react-scripts-ts-electron build",
+    "test": "react-scripts-ts-electron test --env=jsdom",
+    "eject": "react-scripts-ts-electron eject",
+    "package": "electron-builder --config electron-builder.json --dir",
+    "release": "electron-builder --config electron-builder.json"
+  },
+  "homepage": "./",
+  "main": "./electron/index.js",
+  "devDependencies": {
+    "@types/electron-devtools-installer": "^2.0.3",
+    "@types/jest": "^22.2.3",
+    "@types/node": "^9.6.5",
+    "@types/react": "^16.3.11",
+    "@types/react-dom": "^16.0.5",
+    "electron": "^1.8.4",
+    "electron-builder": "^20.9.2",
+    "electron-devtools-installer": "^2.2.3",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts-ts-electron": "0.2.1"
+  }
+}

@@ -1,0 +1,38 @@
+.moccasin-control-bar {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  -webkit-app-region: drag;
+  cursor: grab;
+  z-index: 100000;
+}
+
+.moccasin-control-bar > .option {
+  padding: 3px 3px;
+  cursor: pointer;
+  color: #444;
+  -webkit-app-region: no-drag;
+  font-size: 13px;
+}
+
+.moccasin-control-bar.darwin > .option {
+  visibility: hidden;
+}
+
+.moccasin-control-bar > .option.close:hover {
+  color: #FF5E5C;
+}
+
+.moccasin-control-bar > .option.maximize:hover {
+  color: #00CA57;
+}
+
+.moccasin-control-bar > .option.minimize:hover {
+  color: #FFBC4D;
+}
+
+.moccasin-control-bar > .option:first-child {
+  margin-right: 7px;
+}

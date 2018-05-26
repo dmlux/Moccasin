@@ -1,0 +1,10 @@
+{
+  "productName": "Moccasin",
+  "appId": "de.moccasin.lux",
+  "files": ["app/", "electron/"],
+  "directories": {
+    "app": "build",
+    "buildResources": "src/resources",
+    "output": "releases"
+  }
+}

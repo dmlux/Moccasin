@@ -1,0 +1,137 @@
+/* https://www.vectorstock.com/royalty-free-vector/seamless-decorative-tribal-pattern-with-swallows-vector-9487561 */
+.moccasin-chat-history {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-direction: column;
+  padding: 70px 20px;
+  background: #ffeedf url("./pattern_o40.png");
+}
+
+.moccasin-chat-history::-webkit-scrollbar {
+  display: none;
+}
+
+/* MessageBubble */
+
+.moccasin-message-bubble {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin-bottom: 30px;
+  flex-direction: row;
+  z-index: 900;
+}
+
+.moccasin-message-bubble.from-me {
+  flex-direction: row-reverse;
+}
+
+.moccasin-message-bubble > .avatar-time {
+  flex: 0 0 50px;
+}
+
+.moccasin-message-bubble > .content-wrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  max-width: 70%;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+.moccasin-message-bubble > .content-wrapper > .alignment-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.moccasin-message-bubble.from-me > .content-wrapper > .alignment-wrapper {
+  justify-content: flex-end;
+}
+
+.moccasin-message-bubble > .content-wrapper > .alignment-wrapper > .content {
+  display: flex;
+  padding: 10px 15px;
+  border-radius: 7px;
+  text-align: justify;
+  position: relative;
+  box-shadow: -5px 5px 35px rgba(0, 0, 0, 0.2);
+  font-weight: 100;
+  hyphens: auto;
+  line-height: 1.3em;
+  font-size: 13px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
+}
+
+.moccasin-message-bubble.from-me > .content-wrapper > .alignment-wrapper > .content {
+  background: rgba(49, 68, 86, .8);
+  color: #FFF;
+}
+
+.moccasin-message-bubble:not(.from-me) > .content-wrapper > .alignment-wrapper > .content {
+  background: rgba(255, 112, 40, .8);
+}
+
+.moccasin-message-bubble:not(.from-me) > .content-wrapper > .alignment-wrapper > .content:before {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 7px 7px 0;
+  border-color: transparent rgba(255, 112, 40, .7) transparent transparent;
+  left: -7px;
+  top: calc(50% - 7px);
+}
+
+.moccasin-message-bubble.from-me > .content-wrapper > .alignment-wrapper > .content:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 7px;
+  border-color: transparent transparent transparent rgba(49, 68, 86, .7);
+  right: -7px;
+  top: calc(50% - 7px);
+}
+
+.moccasin-message-bubble > .avatar-time {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.moccasin-message-bubble.from-me > .avatar-time {
+  margin-left: 15px;
+}
+
+.moccasin-message-bubble:not(.from-me) > .avatar-time {
+  margin-right: 15px;
+}
+
+.moccasin-message-bubble > .avatar-time > .avatar {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 25px;
+  background: #FFF;
+  font-size: 50px;
+  text-align: center; 
+  border: 1px solid #AAA;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
+}
+
+.moccasin-message-bubble > .avatar-time > .time {
+  text-align: center;
+  font-size: 11px;
+  margin-top: 7px;
+  background: rgba(27, 170, 123, .8);
+  border-radius: 5px;
+  padding: 3px 1px;
+  color: #FFF;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
+}
