@@ -12,12 +12,12 @@ interface MessageBubbleProps {
 };
 
 // ChatHistory properties
-interface ChatHistoryProps {};
-
-// ChatHistory state
-interface ChatHistoryState {
+interface ChatHistoryProps {
   messages: Message[],
 };
+
+// ChatHistory state
+interface ChatHistoryState {};
 
 // MessageBubble class and HTML representation
 export function MessageBubble(props: MessageBubbleProps): JSX.Element {
@@ -48,71 +48,11 @@ export function MessageBubble(props: MessageBubbleProps): JSX.Element {
 export class ChatHistory extends React.Component<ChatHistoryProps, ChatHistoryState> {
   constructor(props: ChatHistoryProps) {
     super(props);
-    this.state = {
-      messages: [
-        {
-          fromMe: true,
-          text: "Hallo wie gehts?",
-          time: 1527279338,
-        },
-        {
-          fromMe: false,
-          text: "ja ganz gut, und selbst?",
-          time: 1527289338,
-        },
-        {
-          fromMe: true,
-          text: "Auch gut, danke der Nachfrage!",
-          time: 1527299338,
-        },
-        {
-          fromMe: false,
-          text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam"
-            + " nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,"
-            + " sed diam voluptua. At vero eos et accusam et justo duo dolores et ea"
-            + " rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum"
-            + " dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,"
-            + " sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
-            + " erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et"
-            + " ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem"
-            + " ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing"
-            + " elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna"
-            + " aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores"
-            + " et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem"
-            + " ipsum dolor sit amet."
-            + " nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,"
-            + " sed diam voluptua. At vero eos et accusam et justo duo dolores et ea"
-            + " rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum"
-            + " dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,"
-            + " sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
-            + " erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et"
-            + " ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem"
-            + " ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing"
-            + " elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna"
-            + " aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores"
-            + " et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem"
-            + " ipsum dolor sit amet."
-            + " nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,"
-            + " sed diam voluptua. At vero eos et accusam et justo duo dolores et ea"
-            + " rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum"
-            + " dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,"
-            + " sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
-            + " erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et"
-            + " ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem"
-            + " ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing"
-            + " elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna"
-            + " aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores"
-            + " et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem"
-            + " ipsum dolor sit amet.",
-          time: 1527399338,
-        },
-      ],
-    }
   }
 
   renderMessages(): React.ReactNode[] {
     const messages: React.ReactNode[] = [];
-    for (const message of this.state.messages) {
+    for (const message of this.props.messages) {
       messages.push(<MessageBubble
         content={message.text}
         key={message.time}

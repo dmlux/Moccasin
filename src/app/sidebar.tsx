@@ -32,6 +32,8 @@ export function SidebarItem(props: SidebarItemProps): JSX.Element {
   if (props.active) {
     itemClass += " active";
   }
+  // format timestamp to time
+  const date = new Date(props.info.lastMessage.time);
   // render item
   return (
     <div
@@ -46,7 +48,7 @@ export function SidebarItem(props: SidebarItemProps): JSX.Element {
       <div className="right-column">
         <div className="name-time">
           <span className="name">{props.info.name}</span>
-          <span className="time">10:00</span>
+          <span className="time">{date.getHours() + ":" + date.getMinutes()}</span>
         </div>
         <div className="text">
           {message}

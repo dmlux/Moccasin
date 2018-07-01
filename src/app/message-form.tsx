@@ -3,7 +3,9 @@ import React from "react";
 import "./message-form.css";
 
 // MessageForm properties
-interface MessageFormProps {};
+interface MessageFormProps {
+  onSendMessage: (message: string) => void
+};
 
 // MessageForm state
 interface MessageFormState {
@@ -26,11 +28,18 @@ export class MessageForm extends React.Component<MessageFormProps, MessageFormSt
     this.setState({
       text: content,
     });
-    console.log(this.state.text);
+    // console.log(this.state.text);
   }
 
   handleSend(): void {
-    console.log("send message");
+    // get message text
+    const messageBox: HTMLTextAreaElement = document.getElementById("moccasin-text-field") as HTMLTextAreaElement;
+    const messageText: string = messageBox.value;
+    // clear message box
+    messageBox.value = "";
+    messageBox.innerHTML = "";
+    // send message
+    this.props.onSendMessage(messageText);
   }
 
   handleAttach(): void {
@@ -49,7 +58,7 @@ export class MessageForm extends React.Component<MessageFormProps, MessageFormSt
           <i className="ion-paperclip" />
         </a>
         <textarea
-          className="moccasin-text-field"
+          id="moccasin-text-field"
           onChange={(event) => this.handleChange(event.target.value)}
           onKeyUp={(event) => this.autosize(event.currentTarget)}
           rows={1}
