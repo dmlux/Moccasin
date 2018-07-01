@@ -1,5 +1,6 @@
 import * as net from "net";
 import React from "react";
+import * as Moccasin from "./types";
 
 import { ChatHistory } from "./chat-history";
 import { ControlBar } from "./control-bar";
@@ -15,45 +16,10 @@ import "./app.css";
 interface AppProps {};
 
 // App State
-interface NetworkMessageRaw {
-  addr: string,
-  port: number,
-  data: string
-}
-
-interface NetworkMessage {
-  body: string,
-  time: number,
-  type: string,
-}
-
-export interface Message {
-  fromMe: boolean,
-  text: string,
-  time: number,
-};
-
-export interface User {
-  activeConversation: boolean,
-  image: string,
-  ip: string,
-  messages: Message[],
-  lastMessage: Message,
-  name: string,
-  port: number,
-};
-
-export interface UserInfo {
-  image: string,
-  ip: string,
-  name: string,
-  port: number
-};
-
 interface AppState {
-  chatPartners: User[],
+  chatPartners: Moccasin.User[],
   network: net.Server,
-  userInfo: UserInfo
+  userInfo: Moccasin.UserInfo
 };
 
 // App class and HTML representation
@@ -94,7 +60,7 @@ export class App extends React.Component<AppProps, AppState> {
 
   updateUsername(ip: string, port: number, name: string): void {
     // get chat partners
-    const newChatPartners: User[] = this.state.chatPartners.slice();
+    const newChatPartners: Moccasin.User[] = this.state.chatPartners.slice();
     for (const partner of newChatPartners) {
       if (partner.ip === ip && partner.port === port) {
         partner.name = name;
@@ -108,9 +74,9 @@ export class App extends React.Component<AppProps, AppState> {
     });
   }
 
-  updateMessages(ip: string, port: number, networkMessage: NetworkMessage) {
+  updateMessages(ip: string, port: number, networkMessage: Moccasin.NetworkMessage) {
     // get chat partners
-    const newChatPartners: User[] = this.state.chatPartners.slice();
+    const newChatPartners: Moccasin.User[] = this.state.chatPartners.slice();
     for (const partner of newChatPartners) {
       if (partner.ip === ip && partner.port === port) {
         partner.lastMessage = {
@@ -136,12 +102,12 @@ export class App extends React.Component<AppProps, AppState> {
   handleSendMessage(message: string): void {
     // update own history
     const now: number = Date.now();
-    const msg: Message = {
+    const msg: Moccasin.Message = {
       fromMe: true,
       text: message,
       time: now,
     }
-    const newChatPartners: User[] = this.state.chatPartners;
+    const newChatPartners: Moccasin.User[] = this.state.chatPartners;
     // get active conversation
     let addr: string = "";
     let port: number = 0;
@@ -191,11 +157,23 @@ export class App extends React.Component<AppProps, AppState> {
         remoteAddr: partner.ip,
         remotePort: partner.port,
       });
+      // if the username for a given user is not known ask for it!
+      if (partner.name === "") {
+        this.state.network.emit("send-message", {
+          content: JSON.stringify({
+            body: "",
+            time: Date.now(),
+            type: "AUN",
+          }),
+          remoteAddr: partner.ip,
+          remotePort: partner.port,
+        });
+      }
     }
   }
 
-  handlePeerMessageReceived(message: NetworkMessageRaw): void {
-    const messageObj: NetworkMessage = JSON.parse(message.data);
+  handlePeerMessageReceived(message: Moccasin.NetworkMessageRaw): void {
+    const messageObj: Moccasin.NetworkMessage = JSON.parse(message.data);
     const remoteAddr: string = message.addr;
     const remotePort: number = message.port;
     const type: string = messageObj.type;
@@ -223,7 +201,7 @@ export class App extends React.Component<AppProps, AppState> {
 
   handlePeerConnected(peer: Peer): void {
     // construct new peer object
-    const newPeer: User = {
+    const newPeer: Moccasin.User = {
       activeConversation: false,
       image: "",
       ip: peer.addr,
@@ -233,11 +211,11 @@ export class App extends React.Component<AppProps, AppState> {
         time: Date.now(),
       },
       messages: [],
-      name: `${peer.addr}:${peer.port}`,
+      name: "",
       port: peer.port,
     };
     // get existing chat partners
-    const newChatPartners: User[] = this.state.chatPartners.slice();
+    const newChatPartners: Moccasin.User[] = this.state.chatPartners.slice();
     // append new one
     newChatPartners.push(newPeer);
     // if there is no active conversation make the first conversation active
@@ -260,7 +238,7 @@ export class App extends React.Component<AppProps, AppState> {
 
   handlePeerDisconnected(peer: Peer): void {
     // find peer which should be removed from list
-    const newChatPartners: User[] = [];
+    const newChatPartners: Moccasin.User[] = [];
     for (const partner of this.state.chatPartners) {
       if (partner.ip !== peer.addr && partner.port !== peer.port) {
         newChatPartners.push(partner);
@@ -290,9 +268,9 @@ export class App extends React.Component<AppProps, AppState> {
     console.log("Peer2Peer Network online", obj);
   }
 
-  handleChangeConversation(newActivePartner: User): void {
+  handleChangeConversation(newActivePartner: Moccasin.User): void {
     // get a copy of all chat partners
-    const newChatPartners: User[] = this.state.chatPartners.slice();
+    const newChatPartners: Moccasin.User[] = this.state.chatPartners.slice();
     // update copy
     for (const partner of newChatPartners) {
       // each element is not active now
@@ -312,7 +290,11 @@ export class App extends React.Component<AppProps, AppState> {
 
   renderChatTitle(): React.ReactNode {
     // get active conversation to display name on chat history
-    let chatPartner: string = "";
+    let chatPartner: string = "nobody";
+    let username: string = "Me";
+    if (this.state.userInfo.name !== "") {
+      username = this.state.userInfo.name;
+    }
     for (const partner of this.state.chatPartners) {
       if (partner.activeConversation) {
         chatPartner = partner.name;
@@ -322,14 +304,14 @@ export class App extends React.Component<AppProps, AppState> {
     // return HTMLElement
     return (
       <div className="moccasin-chat-partner-name">
-        {this.state.userInfo.name + " to " + chatPartner}
+        {username + " to " + chatPartner}
       </div>
     );
   }
 
   render(): React.ReactNode {
     // get messages from the active conversation
-    let messages: Message[] = [];
+    let messages: Moccasin.Message[] = [];
     for (const partner of this.state.chatPartners) {
       if (partner.activeConversation) {
         messages = partner.messages.slice();

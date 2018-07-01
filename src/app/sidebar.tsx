@@ -1,20 +1,19 @@
 import React from "react";
-
-import { User } from "./app";
+import * as Moccasin from "./types";
 
 import "./sidebar.css";
 
 // SidebarItem properties
 interface SidebarItemProps {
   active: boolean,
-  info: User,
-  onClick: (info: User, item: HTMLDivElement) => void
+  info: Moccasin.User,
+  onClick: (info: Moccasin.User, item: HTMLDivElement) => void
 };
 
 // Sidebar properties
 interface SidebarProps {
-  chatPartners: User[],
-  onChangedConversation: (newActivePartner: User) => void
+  chatPartners: Moccasin.User[],
+  onChangedConversation: (newActivePartner: Moccasin.User) => void
 };
 
 // Sidebar state
@@ -34,6 +33,11 @@ export function SidebarItem(props: SidebarItemProps): JSX.Element {
   }
   // format timestamp to time
   const date = new Date(props.info.lastMessage.time);
+  // format username
+  let username: string = `${props.info.ip}:${props.info.port}`;
+  if (props.info.name !== "") {
+    username = props.info.name;
+  }
   // render item
   return (
     <div
@@ -47,7 +51,7 @@ export function SidebarItem(props: SidebarItemProps): JSX.Element {
       </div>
       <div className="right-column">
         <div className="name-time">
-          <span className="name">{props.info.name}</span>
+          <span className="name">{username}</span>
           <span className="time">{date.getHours() + ":" + date.getMinutes()}</span>
         </div>
         <div className="text">
@@ -67,7 +71,7 @@ export class Sidebar extends React.Component<SidebarProps, SidebarState> {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  onClickHandler(info: User, item: HTMLDivElement): void {
+  onClickHandler(info: Moccasin.User, item: HTMLDivElement): void {
     this.props.onChangedConversation(info);
   }
 

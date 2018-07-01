@@ -1,6 +1,6 @@
-import React from "react";
+import * as Moccasin from "./types";
 
-import { Message } from "./app";
+import React from "react";
 
 import "./chat-history.css";
 
@@ -13,7 +13,7 @@ interface MessageBubbleProps {
 
 // ChatHistory properties
 interface ChatHistoryProps {
-  messages: Message[],
+  messages: Moccasin.Message[],
 };
 
 // ChatHistory state

@@ -32,18 +32,24 @@ export class MessageForm extends React.Component<MessageFormProps, MessageFormSt
   }
 
   handleSend(): void {
-    // get message text
-    const messageBox: HTMLTextAreaElement = document.getElementById("moccasin-text-field") as HTMLTextAreaElement;
-    const messageText: string = messageBox.value;
-    // clear message box
-    messageBox.value = "";
-    messageBox.innerHTML = "";
     // send message
-    this.props.onSendMessage(messageText);
+    this.props.onSendMessage(this.state.text);
+    // clear message box
+    this.setState({
+      text: "",
+    });
   }
 
   handleAttach(): void {
     console.log("attach file");
+  }
+
+  handleLinebreak(event: React.KeyboardEvent<HTMLTextAreaElement>): void {
+    // detect enter key pressed
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      this.handleSend();
+    }
   }
 
   autosize(textarea: HTMLTextAreaElement): void {
@@ -60,6 +66,7 @@ export class MessageForm extends React.Component<MessageFormProps, MessageFormSt
         <textarea
           id="moccasin-text-field"
           onChange={(event) => this.handleChange(event.target.value)}
+          onKeyDown={(event) => this.handleLinebreak(event)}
           onKeyUp={(event) => this.autosize(event.currentTarget)}
           rows={1}
           value={this.state.text}
