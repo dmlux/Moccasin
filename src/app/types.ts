@@ -18,7 +18,6 @@ export interface Message {
 
 export interface User {
   activeConversation: boolean,
-  image: string,
   ip: string,
   messages: Message[],
   lastMessage: Message,

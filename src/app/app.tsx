@@ -34,23 +34,20 @@ export class App extends React.Component<AppProps, AppState> {
       username: "",
     }
 
-    // event handling for the created network
-    this.handleOnline = this.handleOnline.bind(this);
-    this.props.network.on("online", this.handleOnline);
-
-    this.handlePeerConnected = this.handlePeerConnected.bind(this);
-    this.props.network.on("peer-connected", this.handlePeerConnected);
-
-    this.handlePeerDisconnected = this.handlePeerDisconnected.bind(this);
-    this.props.network.on("peer-disconnected", this.handlePeerDisconnected);
-
-    this.handlePeerMessageReceived = this.handlePeerMessageReceived.bind(this);
-    this.props.network.on("peer-message-received", this.handlePeerMessageReceived);
-
     // bind this contenxt to handlers
+    this.handlePeerMessageReceived = this.handlePeerMessageReceived.bind(this);
     this.handleChangeConversation = this.handleChangeConversation.bind(this);
+    this.handlePeerDisconnected = this.handlePeerDisconnected.bind(this);
     this.handleUsernameEntered = this.handleUsernameEntered.bind(this);
+    this.handlePeerConnected = this.handlePeerConnected.bind(this);
     this.handleSendMessage = this.handleSendMessage.bind(this);
+    this.handleOnline = this.handleOnline.bind(this);
+
+    // event handling for the created network
+    this.props.network.on("online", this.handleOnline);
+    this.props.network.on("peer-connected", this.handlePeerConnected);
+    this.props.network.on("peer-disconnected", this.handlePeerDisconnected);
+    this.props.network.on("peer-message-received", this.handlePeerMessageReceived);
   }
 
   updateUsername(ip: string, port: number, name: string): void {
@@ -190,7 +187,6 @@ export class App extends React.Component<AppProps, AppState> {
     // construct new peer object
     const newPeer: Moccasin.User = {
       activeConversation: false,
-      image: "",
       ip: peer.addr,
       lastMessage: {
         fromMe: false,
