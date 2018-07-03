@@ -25,10 +25,3 @@ export interface User {
   name: string,
   port: number,
 };
-
-export interface UserInfo {
-  image: string,
-  ip: string,
-  name: string,
-  port: number
-};

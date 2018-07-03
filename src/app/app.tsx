@@ -8,18 +8,19 @@ import { MessageForm } from "./message-form";
 import { Sidebar } from "./sidebar";
 import { UsernamePrompt } from "./username-prompt";
 
-import { P2PNetwork, Peer } from "./peer2peer";
+import { Peer } from "./peer2peer";
 
 import "./app.css";
 
 // App Properties
-interface AppProps {};
+interface AppProps {
+  network: net.Server
+};
 
 // App State
 interface AppState {
   chatPartners: Moccasin.User[],
-  network: net.Server,
-  userInfo: Moccasin.UserInfo
+  username: string
 };
 
 // App class and HTML representation
@@ -30,27 +31,21 @@ export class App extends React.Component<AppProps, AppState> {
     // init state
     this.state = {
       chatPartners: [],
-      network: P2PNetwork("Moccasin.isp.uni-luebeck.de.www"),
-      userInfo: {
-        image: "",
-        ip: "",
-        name: "",
-        port: 0,
-      },
+      username: "",
     }
 
     // event handling for the created network
     this.handleOnline = this.handleOnline.bind(this);
-    this.state.network.on("online", this.handleOnline);
+    this.props.network.on("online", this.handleOnline);
 
     this.handlePeerConnected = this.handlePeerConnected.bind(this);
-    this.state.network.on("peer-connected", this.handlePeerConnected);
+    this.props.network.on("peer-connected", this.handlePeerConnected);
 
     this.handlePeerDisconnected = this.handlePeerDisconnected.bind(this);
-    this.state.network.on("peer-disconnected", this.handlePeerDisconnected);
+    this.props.network.on("peer-disconnected", this.handlePeerDisconnected);
 
     this.handlePeerMessageReceived = this.handlePeerMessageReceived.bind(this);
-    this.state.network.on("peer-message-received", this.handlePeerMessageReceived);
+    this.props.network.on("peer-message-received", this.handlePeerMessageReceived);
 
     // bind this contenxt to handlers
     this.handleChangeConversation = this.handleChangeConversation.bind(this);
@@ -69,8 +64,7 @@ export class App extends React.Component<AppProps, AppState> {
     // update chat partners
     this.setState({
       chatPartners: newChatPartners,
-      network: this.state.network,
-      userInfo: this.state.userInfo,
+      username: this.state.username,
     });
   }
 
@@ -94,8 +88,7 @@ export class App extends React.Component<AppProps, AppState> {
     // update state
     this.setState({
       chatPartners: newChatPartners,
-      network: this.state.network,
-      userInfo: this.state.userInfo,
+      username: this.state.username,
     });
   }
 
@@ -119,7 +112,7 @@ export class App extends React.Component<AppProps, AppState> {
         partner.lastMessage = msg;
       }
     }
-    this.state.network.emit("send-message", {
+    this.props.network.emit("send-message", {
       content: JSON.stringify({
         body: message,
         time: now,
@@ -131,24 +124,18 @@ export class App extends React.Component<AppProps, AppState> {
     // update history
     this.setState({
       chatPartners: newChatPartners,
-      network: this.state.network,
-      userInfo: this.state.userInfo,
+      username: this.state.username,
     });
   }
 
   handleUsernameEntered(username: string): void {
     this.setState({
       chatPartners: this.state.chatPartners,
-      userInfo: {
-        image: this.state.userInfo.image,
-        ip: this.state.userInfo.ip,
-        name: username,
-        port: this.state.userInfo.port,
-      },
+      username,
     });
     // send username to chat partners
     for (const partner of this.state.chatPartners) {
-      this.state.network.emit("send-message", {
+      this.props.network.emit("send-message", {
         content: JSON.stringify({
           body: username,
           time: Date.now(),
@@ -159,7 +146,7 @@ export class App extends React.Component<AppProps, AppState> {
       });
       // if the username for a given user is not known ask for it!
       if (partner.name === "") {
-        this.state.network.emit("send-message", {
+        this.props.network.emit("send-message", {
           content: JSON.stringify({
             body: "",
             time: Date.now(),
@@ -179,11 +166,11 @@ export class App extends React.Component<AppProps, AppState> {
     const type: string = messageObj.type;
     const body: string = messageObj.body;
     // if we got ask for username
-    if (type === "AUN" && this.state.userInfo.name !== "") {
+    if (type === "AUN" && this.state.username !== "") {
       // send message with own username to sender
-      this.state.network.emit("send-message", {
+      this.props.network.emit("send-message", {
         content: JSON.stringify({
-          body: this.state.userInfo.name,
+          body: this.state.username,
           time: Date.now(),
           type: "RUN",
         }),
@@ -207,7 +194,7 @@ export class App extends React.Component<AppProps, AppState> {
       ip: peer.addr,
       lastMessage: {
         fromMe: false,
-        text: "There are no messages send within this conversation.",
+        text: "There are no messages send or received within this conversation.",
         time: Date.now(),
       },
       messages: [],
@@ -232,7 +219,7 @@ export class App extends React.Component<AppProps, AppState> {
     // set new state
     this.setState({
       chatPartners: newChatPartners,
-      userInfo: this.state.userInfo,
+      username: this.state.username,
     });
   }
 
@@ -260,7 +247,7 @@ export class App extends React.Component<AppProps, AppState> {
     // update internal state
     this.setState({
       chatPartners: newChatPartners,
-      userInfo: this.state.userInfo,
+      username: this.state.username,
     });
   }
 
@@ -283,8 +270,7 @@ export class App extends React.Component<AppProps, AppState> {
     // store changes in the actual object to cause a rerendering
     this.setState({
       chatPartners: newChatPartners,
-      network: this.state.network,
-      userInfo: this.state.userInfo,
+      username: this.state.username,
     });
   }
 
@@ -292,8 +278,8 @@ export class App extends React.Component<AppProps, AppState> {
     // get active conversation to display name on chat history
     let chatPartner: string = "nobody";
     let username: string = "Me";
-    if (this.state.userInfo.name !== "") {
-      username = this.state.userInfo.name;
+    if (this.state.username !== "") {
+      username = this.state.username;
     }
     for (const partner of this.state.chatPartners) {
       if (partner.activeConversation) {
